@@ -5,10 +5,11 @@ ktor:
   deployment:
     port: 8080
 jwt:
-  domain: "https://jwt-provider-domain/"
-  audience: "jwt-audience"
+  audience: "drujite-audience"
+  issuer: "http://localhost/"
   realm: "ktor sample app"
+  secret: $JWT_SECRET
 postgres:
-  url: "jdbc:postgresql://localhost/default"
-  user: username
+  url: "jdbc:postgresql://pg:25432/drujite_pg"
+  user: admin
   password: password
