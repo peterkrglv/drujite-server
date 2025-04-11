@@ -9,7 +9,3 @@ jwt:
   issuer: "http://localhost/"
   realm: "ktor sample app"
   secret: $JWT_SECRET
-postgres:
-  url: "jdbc:postgresql://pg:25432/drujite_pg"
-  user: admin
-  password: password

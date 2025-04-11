@@ -3,9 +3,10 @@ import org.jetbrains.exposed.sql.Database
 
 fun Application.configureDatabases() {
     Database.connect(
-        url = "jdbc:postgresql://pg:5432/drujite_pg",
-        user = "admin",
-        password = "password"
+        //url = "jdbc:postgresql://pg:5432/drujite_pg",
+        url = System.getenv("DB_URL"),
+        user = System.getenv("POSTGRES_USER"),
+        password = System.getenv("POSTGRES_PASSWORD")
     )
 }
 
