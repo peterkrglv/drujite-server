@@ -44,3 +44,21 @@ END;
 $$ language 'plpgsql';
 
 CREATE TRIGGER update_sessions_modtime BEFORE UPDATE ON sessions FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
+
+
+--users_sessions
+CREATE TABLE users_sessions (
+  id SERIAL PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  session_id INT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+CREATE TRIGGER update_users_sessions_modtime BEFORE UPDATE ON users_sessions FOR EACH ROW EXECUTE PROCEDURE update_modified_column();

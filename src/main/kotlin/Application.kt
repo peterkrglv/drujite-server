@@ -1,11 +1,12 @@
 package ru.drujite
 
 import configureDatabases
+import db.repos_impls.SessionRepositoryImpl
 import db.repos_impls.UserRepositoryImpl
 import io.ktor.server.application.*
-import ru.drujite.repos.UserRepositoryTest
 import routing.configureRouting
 import services.JwtService
+import services.SessionService
 import services.UserService
 
 fun main(args: Array<String>) {
@@ -15,17 +16,20 @@ fun main(args: Array<String>) {
 fun Application.module() {
 
     val userRepository = UserRepositoryImpl()
+    val sessionRepository = SessionRepositoryImpl()
+
+
     val userService = UserService(userRepository)
     val jwtService = JwtService(this, userService)
+    val sessionService = SessionService(sessionRepository)
 
 
 
     configureSerialization()
-    configureRouting(userService, jwtService)
+    configureRouting(userService, jwtService, sessionService )
 
 
     configureSecurity(jwtService)
     configureDatabases()
 //    configureMonitoring()
-//    configureDatabases()
 }
