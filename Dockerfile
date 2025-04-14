@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY drujite-server-all.jar /app/app.jar
 
-COPY .env /app/.env
+#COPY .env /app/.env
 COPY application.yaml /app/application.yaml
 
 EXPOSE 8080
