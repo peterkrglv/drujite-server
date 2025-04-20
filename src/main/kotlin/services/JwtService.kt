@@ -3,6 +3,7 @@ package services
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.DecodedJWT
 import io.ktor.server.application.*
 import io.ktor.server.auth.jwt.*
 import requests.LoginRequest
@@ -23,6 +24,7 @@ class JwtService(
             .withAudience(audience)
             .withIssuer(issuer)
             .build()
+
     suspend fun createJwtToken(loginRequest: LoginRequest): String? {
         val foundUser: UserModel? = userService.findByPhone(loginRequest.phone)
         return if (foundUser != null && loginRequest.password == foundUser.password)
@@ -35,6 +37,7 @@ class JwtService(
         else
             null
     }
+
     suspend fun customValidator(
         credential: JWTCredential,
     ): JWTPrincipal? {
@@ -47,12 +50,18 @@ class JwtService(
                 null
         }
     }
+
     private fun audienceMatches(
         credential: JWTCredential,
     ): Boolean =
         credential.payload.audience.contains(audience)
+
     private fun getConfigProperty(path: String) =
         application.environment.config.property(path).getString()
-    private fun extractId(credential: JWTCredential): String? =
+
+    fun extractId(credential: JWTCredential): String? =
         credential.payload.getClaim("id").asString()
+
+    fun extractId(principal: JWTPrincipal): String? =
+        principal.payload.getClaim("id").asString()
 }

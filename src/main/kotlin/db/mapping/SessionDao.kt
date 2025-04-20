@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 
 object SessionTable : IntIdTable("sessions") {
     val name = varchar("name", 255)
-    val description = text("description").nullable()
+    val description = text("description")
     val startDate = datetime("start_date")
     val endDate = datetime("end_date")
     val imageUrl = varchar("image_url", 255).nullable()

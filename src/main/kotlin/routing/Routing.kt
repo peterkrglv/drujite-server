@@ -9,11 +9,13 @@ import ru.drujite.routing.authRoute
 import services.JwtService
 import services.SessionService
 import services.UserService
+import services.UsersSessionsService
 
 fun Application.configureRouting(
     userService: UserService,
     jwtService: JwtService,
-    sessionService: SessionService
+    sessionService: SessionService,
+    usersSessionsService: UsersSessionsService
 ) {
     routing {
         static("/static") {
@@ -21,7 +23,7 @@ fun Application.configureRouting(
         }
 
         route("/api/v1/user") {
-            userRoute(userService)
+            userRoute(userService, jwtService)
         }
 
         route("/api/v1/auth") {
@@ -35,33 +37,39 @@ fun Application.configureRouting(
         route("/api/v1/session") {
             sessionRoute(jwtService, sessionService)
         }
-        get("/api/v1/db") {
-            //html page with db credentials from env
-            val dbUrl = System.getenv("DB_URL")
-            val dbUser = System.getenv("POSTGRES_USER")
-            val dbPassword = System.getenv("POSTGRES_PASSWORD")
-            call.respondText(
-                """
-                    <html>
-                        <head>
-                            <title>DB Credentials</title>
-                            <link rel="stylesheet" type="text/css" href="/static/styles.css">
-                        </head>
-                        <body>
-                            <h1>DB Credentials</h1>
-                            <p>URL: $dbUrl</p>
-                            <p>User: $dbUser</p>
-                            <p>Password: $dbPassword</p>
-                        </body>
-                    </html>
-                    """.trimIndent(),
-                ContentType.Text.Html
-            )
 
+        route("/api/v1/users-sessions") {
+            usersSessionsRoute(jwtService, usersSessionsService)
         }
 
+
+//        get("/api/v1/db") {
+//            //html page with db credentials from env
+//            val dbUrl = System.getenv("DB_URL")
+//            val dbUser = System.getenv("POSTGRES_USER")
+//            val dbPassword = System.getenv("POSTGRES_PASSWORD")
+//            call.respondText(
+//                """
+//                    <html>
+//                        <head>
+//                            <title>DB Credentials</title>
+//                            <link rel="stylesheet" type="text/css" href="/static/styles.css">
+//                        </head>
+//                        <body>
+//                            <h1>DB Credentials</h1>
+//                            <p>URL: $dbUrl</p>
+//                            <p>User: $dbUser</p>
+//                            <p>Password: $dbPassword</p>
+//                        </body>
+//                    </html>
+//                    """.trimIndent(),
+//                ContentType.Text.Html
+//            )
+//
+//        }
+
         get("/api/v1/") {
-            println(application.environment.config.property("jwt.secret").getString())
+            environment.log.info("Heloo")
             call.respondText(
                 """
                 <html>

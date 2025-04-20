@@ -9,23 +9,21 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import ru.drujite.models.UserModel
 import ru.drujite.responces.UserResponse
+import services.JwtService
 import services.UserService
 import java.util.*
 
-fun Route.userRoute(userService: UserService) {
-    get("/{id}") {
-        val id: String = call.parameters["id"]
-            ?: return@get call.respond(HttpStatusCode.BadRequest)
-
-        val foundUser = userService.findById(id)
-            ?: return@get call.respond(HttpStatusCode.NotFound)
-
-        if (foundUser.username != extractPrincipalUsername(call))
-            return@get call.respond(HttpStatusCode.NotFound)
-
-        call.respond(
-            message = foundUser.toResponse()
-        )
+fun Route.userRoute(userService: UserService, jwtService: JwtService) {
+    authenticate {
+        get ("/me"){
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val foundUser = userService.findById(userId)
+                ?: return@get call.respond(HttpStatusCode.BadRequest)
+            call.respond(
+                message = foundUser.toResponse()
+            )
+        }
     }
 }
 
@@ -51,3 +49,19 @@ private fun extractPrincipalUsername(call: ApplicationCall): String? =
         ?.payload
         ?.getClaim("username")
         ?.asString()
+
+
+//        get("/{id}") {
+//            val id: String = call.parameters["id"]
+//                ?: return@get call.respond(HttpStatusCode.BadRequest)
+//
+//            val foundUser = userService.findById(id)
+//                ?: return@get call.respond(HttpStatusCode.NotFound)
+//
+//            if (foundUser.username != extractPrincipalUsername(call))
+//                return@get call.respond(HttpStatusCode.NotFound)
+//
+//            call.respond(
+//                message = foundUser.toResponse()
+//            )
+//        }

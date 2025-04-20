@@ -6,10 +6,10 @@ import ru.drujite.models.UserModel
 import java.util.*
 
 object UserTable : UUIDTable("users") {
-    val phone = varchar("phone", 50).uniqueIndex()
-    val username = varchar("username", 50)
-    val password = varchar("password", 512) // Увеличена длина для соответствия SQL
-    val gender = varchar("gender", 50)
+    val phone = varchar("phone", 15).uniqueIndex()
+    val username = varchar("username", 255)
+    val password = varchar("password", 255) // Увеличена длина для соответствия SQL
+    val gender = varchar("gender", 15)
 }
 
 class UserDAO(id: EntityID<UUID>) : UUIDEntity(id) {

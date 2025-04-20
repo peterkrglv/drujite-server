@@ -1,3 +1,22 @@
+-- clans
+INSERT INTO clans (name, description)
+VALUES
+    ('Вивианитовая Ветвь', ''),
+    ('Гранатовая Ветвь', ''),
+    ('Янтарная Ветвь', ''),
+    ('Ониксовая Ветвь', ''),
+    ('Община Воинэж', ''),
+    ('Община Хассалех', '');
+
+
+-- characters
+INSERT INTO characters (clan_id, name, story, image_url)
+VALUES
+    (2, 'Мирон Аристов', 'Мирон истинный уроженец Гранатовой ветви. Будучи выращенным вблизи вулканов, он с детства познавал дикую магию, подвергался изнуряющим тренировкам и был свидетелем...', NULL),
+    (1, 'Персонаж 1', '', NULL),
+    (3, 'Персонаж 2', '', NULL);
+
+
 -- sessions
 INSERT INTO sessions (name, description, start_date, end_date)
 VALUES
@@ -13,11 +32,10 @@ VALUES
 
 
 -- users-sessions
-INSERT INTO users_sessions (user_id, session_id)
+INSERT INTO users_sessions (user_id, session_id, character_id)
 VALUES
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 4),
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 5),
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 6),
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 7),
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 8),
-    ('d257eb82-fe85-43b8-9a3d-b31bb793eb49', 9);
+    ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 5, 1),
+    ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 6, 2),
+    ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 8, 1),
+    ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 7, 2),
+    ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 9, 3);

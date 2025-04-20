@@ -17,59 +17,40 @@ fun Route.sessionRoute(
     jwtService: JwtService,
     sessionService: SessionService,
 ) {
-    fun Route.sessionRoute(
-        jwtService: JwtService,
-        sessionService: SessionService,
-    ) {
-        authenticate {
-            get("/{id}") {
-                val request = call.receive<GetSession>()
-                val session = sessionService.getSessionById(request)
-                if (session == null) {
-                    call.respond(HttpStatusCode.NotFound)
-                    return@get
-                }
 
-                call.respond(HttpStatusCode.OK, session.toResponse())
-            }
-
-            get("/user-sessions") {
-                val principal = call.principal<JWTPrincipal>()
-                    ?: return@get call.respond(HttpStatusCode.Unauthorized)
-
-                val userId = principal.payload.getClaim("userId").asString()
-                    ?: return@get call.respond(HttpStatusCode.BadRequest)
-
-                val sessions = sessionService.getSessionsByUserId(userId)
-                call.respond(HttpStatusCode.OK, sessions.map { it.toResponse() })
-            }
-
-            post {
-                val sessionRequest = call.receive<SessionRequest>()
-                sessionService.addSession(sessionRequest)
-                call.respond(HttpStatusCode.Created, sessionRequest.toResponse())
-            }
-
-            delete {
-                val id = call.parameters["id"]?.toIntOrNull()
-                    ?: return@delete call.respond(HttpStatusCode.BadRequest)
-
-                sessionService.deleteSession(id)
-                call.respond(HttpStatusCode.NoContent)
-            }
+    authenticate {
+        get("/user-sessions") {
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val sessions = sessionService.getSessionsByUserId(userId)
+            call.respond(HttpStatusCode.OK, sessions.map { it.toResponse() })
         }
+
+        post {
+            val sessionRequest = call.receive<SessionRequest>()
+            sessionService.addSession(sessionRequest)
+            call.respond(HttpStatusCode.Created, sessionRequest.toResponse())
+        }
+
+        delete {
+            val id = call.parameters["id"]?.toIntOrNull()
+                ?: return@delete call.respond(HttpStatusCode.BadRequest)
+
+            sessionService.deleteSession(id)
+            call.respond(HttpStatusCode.NoContent)
+        }
+
     }
 }
 
-private fun SessionRequest.toResponse(): SessionResponse
-    = SessionResponse(
-        id = 0,
-        name = this.name,
-        description = this.description,
-        startDate = this.startDate,
-        endDate = this.endDate,
-        imageUrl = this.imageUrl
-    )
+private fun SessionRequest.toResponse(): SessionResponse = SessionResponse(
+    id = 0,
+    name = this.name,
+    description = this.description,
+    startDate = this.startDate,
+    endDate = this.endDate,
+    imageUrl = this.imageUrl
+)
 
 private fun SessionModel.toResponse(): SessionResponse {
     return SessionResponse(
