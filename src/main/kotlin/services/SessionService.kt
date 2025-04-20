@@ -3,14 +3,14 @@ package services
 import db.repos.SessionRepository
 import models.SessionModel
 import requests.SessionRequest
-import requests.GetSession
+import requests.SessionIdRequest
 import java.util.*
 
 class SessionService(
     private val sessionRepository: SessionRepository,
 ) {
 
-    suspend fun getSessionById(request: GetSession) = sessionRepository.getById(request.id)
+    suspend fun getSessionById(request: SessionIdRequest) = sessionRepository.getById(request.sessionId)
 
     suspend fun addSession(
         request: SessionRequest

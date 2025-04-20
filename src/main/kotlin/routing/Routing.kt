@@ -42,6 +42,10 @@ fun Application.configureRouting(
             usersSessionsRoute(jwtService, usersSessionsService)
         }
 
+        route("/api/v1/users-characters") {
+            usersCharactersRoute(jwtService, usersSessionsService)
+        }
+
 
 //        get("/api/v1/db") {
 //            //html page with db credentials from env

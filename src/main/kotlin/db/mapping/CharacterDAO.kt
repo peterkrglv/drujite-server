@@ -8,9 +8,9 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 
 object CharacterTable : IntIdTable("characters") {
     val name = varchar("name", 255)
-    val story = text("description")
-    val clanId = reference("clan_id", ClanTable)
-    val image_url = varchar("image_url", 255)
+    val story = text("story")
+    val clanId = integer("clan_id").references(ClanTable.id)
+    val image_url = varchar("image_url", 255).nullable()
 }
 
 class CharacterDAO(id: EntityID<Int>) : IntEntity(id) {
@@ -26,6 +26,6 @@ fun daoToModel(dao: CharacterDAO) = CharacterModel(
     id = dao.id.value,
     name = dao.name,
     story = dao.story,
-    clanId = dao.clanId.value,
+    clanId = dao.clanId,
     imageUrl = dao.imageUrl
 )

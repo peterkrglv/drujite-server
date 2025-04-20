@@ -74,8 +74,23 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
         }
     }
 
+    override suspend fun getCharacterIds(userId: UUID): List<Int> {
+        return suspendTransaction {
+            UsersSessionsDAO.find { UsersSessionsTable.userId eq userId }
+                .mapNotNull { it.characterId }
+                .distinct()
+        }
+    }
+
+    override suspend fun getSessionsCharactersIds(sessionId: Int): List<Int> {
+        return suspendTransaction {
+            UsersSessionsDAO.find { UsersSessionsTable.sessionId eq sessionId }
+                .mapNotNull { it.characterId }
+        }
+    }
+
     override suspend fun getUsersSessions(userId: UUID): List<SessionModel> {
-        return transaction {
+        return suspendTransaction {
             UsersSessionsDAO.find { UsersSessionsTable.userId eq userId }
                 .mapNotNull { it.sessionId.let(SessionDAO::findById)?.let(::daoToModel) }
         }

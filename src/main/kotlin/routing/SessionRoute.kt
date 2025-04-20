@@ -7,7 +7,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.SessionModel
-import requests.GetSession
 import requests.SessionRequest
 import responces.SessionResponse
 import services.JwtService

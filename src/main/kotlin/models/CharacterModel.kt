@@ -1,5 +1,7 @@
 package models
 
+import responces.CharacterResponse
+
 data class CharacterModel (
     val id: Int,
     val name: String,
@@ -7,3 +9,4 @@ data class CharacterModel (
     val clanId: Int,
     val imageUrl: String? = null
 )
+

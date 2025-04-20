@@ -8,5 +8,5 @@ data class CharacterResponse (
     val name: String,
     val story: String,
     val clanId: Int,
-    val imageUrl: String
+    val imageUrl: String?
 )

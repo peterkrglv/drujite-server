@@ -1,6 +1,7 @@
 package ru.drujite
 
 import configureDatabases
+import db.repos_impls.CharacterRepositoryImpl
 import db.repos_impls.SessionRepositoryImpl
 import db.repos_impls.UserRepositoryImpl
 import db.repos_impls.UsersSessionsRepositoryImpl
@@ -20,12 +21,13 @@ fun Application.module() {
     val userRepository = UserRepositoryImpl()
     val sessionRepository = SessionRepositoryImpl()
     val usersSessionRepository = UsersSessionsRepositoryImpl()
+    val characterRepository = CharacterRepositoryImpl()
 
 
     val userService = UserService(userRepository)
     val jwtService = JwtService(this, userService)
     val sessionService = SessionService(sessionRepository)
-    val usersSessionService = UsersSessionsService(usersSessionRepository)
+    val usersSessionService = UsersSessionsService(usersSessionRepository, characterRepository)
 
 
     configureSerialization()
