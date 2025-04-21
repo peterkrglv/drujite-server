@@ -6,73 +6,55 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import ru.drujite.routing.authRoute
-import services.JwtService
-import services.SessionService
-import services.UserService
-import services.UsersSessionsService
+import services.*
 
 fun Application.configureRouting(
     userService: UserService,
     jwtService: JwtService,
     sessionService: SessionService,
-    usersSessionsService: UsersSessionsService
+    usersSessionsService: UsersSessionsService,
+    characterService: CharacterService,
+    goalService: GoalService,
 ) {
+    val v1 = "/api/v1/"
     routing {
         static("/static") {
             resources("static")
         }
 
-        route("/api/v1/user") {
+        route(v1 + "user") {
             userRoute(userService, jwtService)
         }
 
-        route("/api/v1/auth") {
+        route(v1 + "auth") {
             authRoute(jwtService)
         }
 
-        route("/api/v1/signup") {
+        route(v1 + "signup") {
             signupRoute(jwtService, userService)
         }
 
-        route("/api/v1/session") {
+        route(v1 + "session") {
             sessionRoute(jwtService, sessionService)
         }
 
-        route("/api/v1/users-sessions") {
+        route(v1 + "users-sessions") {
             usersSessionsRoute(jwtService, usersSessionsService)
         }
 
-        route("/api/v1/users-characters") {
+        route(v1 + "users-characters") {
             usersCharactersRoute(jwtService, usersSessionsService)
         }
 
+        route(v1 + "character") {
+            characterRoute(characterService)
+        }
 
-//        get("/api/v1/db") {
-//            //html page with db credentials from env
-//            val dbUrl = System.getenv("DB_URL")
-//            val dbUser = System.getenv("POSTGRES_USER")
-//            val dbPassword = System.getenv("POSTGRES_PASSWORD")
-//            call.respondText(
-//                """
-//                    <html>
-//                        <head>
-//                            <title>DB Credentials</title>
-//                            <link rel="stylesheet" type="text/css" href="/static/styles.css">
-//                        </head>
-//                        <body>
-//                            <h1>DB Credentials</h1>
-//                            <p>URL: $dbUrl</p>
-//                            <p>User: $dbUser</p>
-//                            <p>Password: $dbPassword</p>
-//                        </body>
-//                    </html>
-//                    """.trimIndent(),
-//                ContentType.Text.Html
-//            )
-//
-//        }
+        route (v1 + "goal") {
+            goalRoute(goalService)
+        }
 
-        get("/api/v1/") {
+        get(v1) {
             environment.log.info("Heloo")
             call.respondText(
                 """

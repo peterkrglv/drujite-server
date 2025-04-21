@@ -6,14 +6,14 @@ import db.repos.CharacterRepository
 import models.CharacterModel
 
 class CharacterRepositoryImpl: CharacterRepository {
-    override suspend fun add(character: CharacterModel): Boolean {
+    override suspend fun add(character: CharacterModel): Int {
         return suspendTransaction {
             CharacterDAO.new {
                 name = character.name
                 story = character.story
                 clanId = character.clanId
                 imageUrl = character.imageUrl
-            }.let { it.id.value > 0 }
+            }.id.value
         }
     }
 

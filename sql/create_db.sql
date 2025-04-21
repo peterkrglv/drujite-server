@@ -81,7 +81,7 @@ CREATE TABLE events
     num         INT NOT NULL,
     name        VARCHAR(65) NOT NULL,
     time        TIME WITHOUT TIME ZONE NOT NULL,
-    isTitle     BOOLEAN DEFAULT FALSE,
+    is_title     BOOLEAN DEFAULT FALSE,
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
@@ -154,8 +154,8 @@ CREATE TABLE goals
 (
     id           SERIAL PRIMARY KEY,
     character_id INT REFERENCES characters (id) ON DELETE CASCADE,
-    goal         VARCHAR(255) NOT NULL,
-    isCompleted  BOOLEAN DEFAULT FALSE,
+    name         VARCHAR(255) NOT NULL,
+    is_completed  BOOLEAN DEFAULT FALSE,
     created_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
