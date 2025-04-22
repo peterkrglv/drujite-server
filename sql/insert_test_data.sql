@@ -8,6 +8,10 @@ VALUES
     ('Община Воинэж', ''),
     ('Община Хассалех', '');
 
+INSERT INTO sessions_clans (session_id, clan_id)
+SELECT s.id, c.id
+FROM clans c
+         CROSS JOIN (SELECT 3 AS id UNION SELECT 6 AS id) s;
 
 -- characters
 INSERT INTO characters (clan_id, name, story, image_url)

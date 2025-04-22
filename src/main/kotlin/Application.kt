@@ -17,19 +17,32 @@ fun Application.module() {
     val usersSessionRepository = UsersSessionsRepositoryImpl()
     val characterRepository = CharacterRepositoryImpl()
     val goalRepository = GoalRepositoryImpl()
+    val timeTableRepository = TimeTableRepositoryImpl()
+    val eventRepository = EventRepositoryImpl()
+    val clanRepository = ClanRepositoryImpl()
 
 
     val userService = UserService(userRepository)
     val jwtService = JwtService(this, userService)
     val sessionService = SessionService(sessionRepository)
     val usersSessionService = UsersSessionsService(usersSessionRepository, characterRepository)
-    val characterService = CharacterService(characterRepository)
+    val characterService = CharacterService(characterRepository, usersSessionRepository, clanRepository)
     val goalService = GoalService(goalRepository)
-
+    val timeTableService = TimeTableService(timeTableRepository, eventRepository)
+    val clanService = ClanService(clanRepository)
 
     configureSerialization()
     configureSecurity(jwtService)
-    configureRouting(userService, jwtService, sessionService, usersSessionService, characterService, goalService)
+    configureRouting(
+        userService,
+        jwtService,
+        sessionService,
+        usersSessionService,
+        characterService,
+        goalService,
+        timeTableService,
+        clanService
+    )
     configureDatabases()
     configureMonitoring()
 }

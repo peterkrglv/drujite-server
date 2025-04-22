@@ -15,6 +15,8 @@ fun Application.configureRouting(
     usersSessionsService: UsersSessionsService,
     characterService: CharacterService,
     goalService: GoalService,
+    timeTableService: TimeTableService,
+    clanService: ClanService
 ) {
     val v1 = "/api/v1/"
     routing {
@@ -52,6 +54,18 @@ fun Application.configureRouting(
 
         route (v1 + "goal") {
             goalRoute(goalService)
+        }
+
+        route(v1 + "timetable") {
+            timeTableRoute(timeTableService)
+        }
+
+        route(v1 + "event") {
+            eventRoute(timeTableService)
+        }
+
+        route(v1 + "clan") {
+            clanRoute(clanService = clanService)
         }
 
         get(v1) {

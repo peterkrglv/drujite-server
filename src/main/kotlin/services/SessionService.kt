@@ -3,32 +3,33 @@ package services
 import db.repos.SessionRepository
 import models.SessionModel
 import requests.SessionRequest
-import requests.SessionIdRequest
 import java.util.*
 
 class SessionService(
-    private val sessionRepository: SessionRepository,
+    private val sessionRepository: SessionRepository
 ) {
 
-    suspend fun getSessionById(request: SessionIdRequest) = sessionRepository.getById(request.sessionId)
+    suspend fun getSession(sessionId: Int) = sessionRepository.get(sessionId)
 
     suspend fun addSession(
         request: SessionRequest
-    ) = sessionRepository.addSession(
+    ) = sessionRepository.add(
         SessionModel(
             id = 0,
             name = request.name,
             description = request.description,
             startDate = request.startDate,
             endDate = request.endDate,
-            imageUrl = request.imageUrl,
+            imageUrl = request.image,
         )
     )
 
-    suspend fun deleteSession(id: Int) = sessionRepository.deleteSession(id)
+    suspend fun deleteSession(id: Int) = sessionRepository.delete(id)
 
     suspend fun getSessionsByUserId(userId: String) =
         sessionRepository.getSessionsByUserId(
             UUID.fromString(userId),
         )
+
+    suspend fun getAllSessions() = sessionRepository.getAll()
 }

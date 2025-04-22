@@ -1,22 +1,26 @@
 package db.repos_impls
 
+import UserDAO
+import UserTable
+import daoToModel
 import db.mapping.*
 import db.repos.UsersSessionsRepository
 import models.SessionModel
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.transaction
+import ru.drujite.models.UserModel
 import java.util.*
 
 class UsersSessionsRepositoryImpl : UsersSessionsRepository {
     override suspend fun addUserSession(userId: UUID, sessionId: Int, characterId: Int?): Boolean {
         return suspendTransaction {
-            val existingSession = UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }.firstOrNull()
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
+                    .firstOrNull()
             if (existingSession != null) {
                 if (characterId != null) {
                     existingSession.characterId = characterId
                     return@suspendTransaction true
-                }
-                else {
+                } else {
                     return@suspendTransaction false
                 }
             } else {
@@ -33,7 +37,9 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
 
     override suspend fun addCharacter(userId: UUID, sessionId: Int, characterId: Int): Boolean {
         return suspendTransaction {
-            val existingSession = UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }.firstOrNull()
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
+                    .firstOrNull()
             if (existingSession != null) {
                 existingSession.characterId = characterId
                 return@suspendTransaction true
@@ -45,7 +51,9 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
 
     override suspend fun deleteUserSession(userId: UUID, sessionId: Int): Boolean {
         return suspendTransaction {
-            val existingSession = UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }.firstOrNull()
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
+                    .firstOrNull()
             if (existingSession != null) {
                 existingSession.delete()
                 return@suspendTransaction true
@@ -57,7 +65,9 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
 
     override suspend fun deleteCharacter(userId: UUID, sessionId: Int, characterId: Int): Boolean {
         return suspendTransaction {
-            val existingSession = UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) and (UsersSessionsTable.characterId eq characterId) }.firstOrNull()
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) and (UsersSessionsTable.characterId eq characterId) }
+                    .firstOrNull()
             if (existingSession != null) {
                 existingSession.characterId = null
                 return@suspendTransaction true
@@ -69,7 +79,9 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
 
     override suspend fun getCharacterId(userId: UUID, sessionId: Int): Int? {
         return suspendTransaction {
-            val existingSession = UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }.firstOrNull()
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
+                    .firstOrNull()
             return@suspendTransaction existingSession?.characterId
         }
     }
@@ -93,6 +105,17 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
         return suspendTransaction {
             UsersSessionsDAO.find { UsersSessionsTable.userId eq userId }
                 .mapNotNull { it.sessionId.let(SessionDAO::findById)?.let(::daoToModel) }
+        }
+    }
+
+    override suspend fun getUserByCharacter(characterId: Int): UserModel? {
+        return suspendTransaction {
+            val userId = UsersSessionsDAO.find { UsersSessionsTable.characterId eq characterId }
+                .firstNotNullOfOrNull { it.userId }
+            val user = userId?.let {
+                UserDAO.find { UserTable.id eq it }.firstOrNull()
+            }
+            user?.let { daoToModel(it) }
         }
     }
 }

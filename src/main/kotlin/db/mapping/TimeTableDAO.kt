@@ -8,19 +8,19 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date
 
 object TimeTable: IntIdTable("timetables") {
-    val sessionId = reference("session_id", SessionTable)
+    val sessionId = integer("session_id").references(SessionTable.id)
     val date = date("date")
 }
 
 class TimeTableDAO(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<TimeTableDAO>(TimeTable)
 
-    var sessionId by SessionTable.id
+    var sessionId by TimeTable.sessionId
     var date by TimeTable.date
 }
 
 fun daoToModel(dao: TimeTableDAO) = TimeTableModel(
     id = dao.id.value,
-    sessionId = dao.sessionId.value,
+    sessionId = dao.sessionId,
     date = dao.date.toString()
 )

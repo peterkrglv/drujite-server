@@ -118,10 +118,12 @@ CREATE TABLE clans
 (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT,
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
+--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ALTER TABLE clans ALTER COLUMN description DROP NOT NULL;
 
 CREATE TRIGGER update_clan_modtime
     BEFORE UPDATE

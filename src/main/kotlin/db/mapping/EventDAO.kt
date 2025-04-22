@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.time
 
 object EventTable: IntIdTable("events") {
-    val timetableId = reference("timetable_id", TimeTable)
+    val timetableId = integer("timetable_id").references(TimeTable.id)
     val num = integer("num")
     val name = varchar("name", 255)
     val time = time("time")
@@ -18,7 +18,7 @@ object EventTable: IntIdTable("events") {
 class EventDAO(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<EventDAO>(EventTable)
 
-    var timetableId by TimeTable.id
+    var timetableId by EventTable.timetableId
     var num by EventTable.num
     var name by EventTable.name
     var time by EventTable.time
@@ -27,7 +27,7 @@ class EventDAO(id: EntityID<Int>) : IntEntity(id) {
 
 fun daoToModel(dao: EventDAO) = EventModel(
     id = dao.id.value,
-    timetableId = dao.timetableId.value,
+    timetableId = dao.timetableId,
     num = dao.num,
     name = dao.name,
     time = dao.time.toString(),

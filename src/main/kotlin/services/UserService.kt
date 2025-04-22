@@ -8,7 +8,7 @@ class UserService (
     private val userRepository: UserRepository
 ) {
     suspend fun findById(id: String): UserModel? {
-        return userRepository.getById(UUID.fromString(id))
+        return userRepository.get(UUID.fromString(id))
     }
 
     suspend fun findByPhone(phone: String): UserModel? {
@@ -20,6 +20,6 @@ class UserService (
         if (foundUser != null) {
             return null
         }
-        return userRepository.addUser(user)
+        return userRepository.add(user)
     }
 }

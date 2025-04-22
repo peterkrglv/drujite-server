@@ -2,18 +2,16 @@ package routing
 
 import io.ktor.http.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.GoalModel
 import requests.AddGoalRequest
-import requests.CharacterRequest
+import requests.CharacterIdRequest
 import requests.GoalRequest
 import responces.GoalResponse
 import responces.IdResponse
 import services.GoalService
-import services.JwtService
 
 
 fun Route.goalRoute(
@@ -47,7 +45,7 @@ fun Route.goalRoute(
         }
 
         get("/character-all") {
-            val request = call.receive<CharacterRequest>()
+            val request = call.receive<CharacterIdRequest>()
             val goals = goalService.getCharacterGoals(request.characterId)
             call.respond(
                 HttpStatusCode.OK,

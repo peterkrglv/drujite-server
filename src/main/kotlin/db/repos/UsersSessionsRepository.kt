@@ -1,6 +1,7 @@
 package db.repos
 
 import models.SessionModel
+import ru.drujite.models.UserModel
 import java.util.*
 
 interface UsersSessionsRepository {
@@ -12,4 +13,5 @@ interface UsersSessionsRepository {
     suspend fun getCharacterIds(userId: UUID): List<Int>
     suspend fun getSessionsCharactersIds(sessionId: Int): List<Int>
     suspend fun getUsersSessions(userId: UUID): List<SessionModel>
+    suspend fun getUserByCharacter(characterId: Int): UserModel?
 }
