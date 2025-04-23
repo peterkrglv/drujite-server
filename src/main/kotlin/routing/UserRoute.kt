@@ -15,9 +15,10 @@ import java.util.*
 
 fun Route.userRoute(userService: UserService, jwtService: JwtService) {
     authenticate {
-        get ("/me"){
+        get("/me") {
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val userId =
+                principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val foundUser = userService.findById(userId)
                 ?: return@get call.respond(HttpStatusCode.BadRequest)
             call.respond(
@@ -39,8 +40,8 @@ fun SignupRequest.toModel(): UserModel {
 
 private fun UserModel.toResponse(): UserResponse {
     return UserResponse(
-        id = this.id,
         username = this.username,
+        phone = this.phone
     )
 }
 
