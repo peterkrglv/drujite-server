@@ -11,6 +11,7 @@ EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
+
 #FROM eclipse-temurin:17-jdk-jammy as builder
 #
 #WORKDIR /app
