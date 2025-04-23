@@ -7,8 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.GoalModel
 import requests.AddGoalRequest
-import requests.CharacterIdRequest
-import requests.GoalRequest
+import requests.IdRequest
 import responses.GoalResponse
 import responses.IdResponse
 import services.GoalService
@@ -19,8 +18,8 @@ fun Route.goalRoute(
 ) {
     authenticate {
         get() {
-            val request: GoalRequest = call.receive<GoalRequest>()
-            val goal = goalService.getGoal(request.goalId)
+            val request: IdRequest = call.receive<IdRequest>()
+            val goal = goalService.getGoal(request.id)
             if (goal != null) {
                 call.respond(goal.toResponse())
             } else {
@@ -35,8 +34,8 @@ fun Route.goalRoute(
         }
 
         delete() {
-            val request = call.receive<GoalRequest>()
-            val result = goalService.deleteGoal(request.goalId)
+            val request = call.receive<IdRequest>()
+            val result = goalService.deleteGoal(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -45,8 +44,8 @@ fun Route.goalRoute(
         }
 
         get("/character-all") {
-            val request = call.receive<CharacterIdRequest>()
-            val goals = goalService.getCharacterGoals(request.characterId)
+            val request = call.receive<IdRequest>()
+            val goals = goalService.getCharacterGoals(request.id)
             call.respond(
                 HttpStatusCode.OK,
                 goals.map { it.toResponse() }
@@ -54,8 +53,8 @@ fun Route.goalRoute(
         }
 
         put("/complete") {
-            val request = call.receive<GoalRequest>()
-            val result = goalService.updateGoalStatus(request.goalId)
+            val request = call.receive<IdRequest>()
+            val result = goalService.updateGoalStatus(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {

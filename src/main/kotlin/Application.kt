@@ -5,7 +5,6 @@ import db.repos_impls.*
 import io.ktor.server.application.*
 import routing.configureRouting
 import services.*
-import util.configureHTTP
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -36,7 +35,6 @@ fun Application.module() {
 
     configureSerialization()
     configureSecurity(jwtService)
-    configureHTTP()
     configureRouting(
         userService,
         jwtService,

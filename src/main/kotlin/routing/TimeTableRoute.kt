@@ -7,8 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.TimeTableModel
 import requests.AddTimeTableRequest
-import requests.SessionIdRequest
-import requests.TimeTableIdRequest
+import requests.IdRequest
 import responses.IdResponse
 import responses.TimeTableResponse
 import services.TimeTableService
@@ -24,8 +23,8 @@ fun Route.timeTableRoute(
         }
 
         delete {
-            val request = call.receive<TimeTableIdRequest>()
-            val result = timeTableService.deleteTimeTable(request.timeTableId)
+            val request = call.receive<IdRequest>()
+            val result = timeTableService.deleteTimeTable(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -34,8 +33,8 @@ fun Route.timeTableRoute(
         }
 
         get {
-            val request = call.receive<TimeTableIdRequest>()
-            val timeTable = timeTableService.getTimeTable(request.timeTableId)
+            val request = call.receive<IdRequest>()
+            val timeTable = timeTableService.getTimeTable(request.id)
             if (timeTable != null) {
                 call.respond(HttpStatusCode.OK, timeTable.toResponse())
             } else {
@@ -44,8 +43,8 @@ fun Route.timeTableRoute(
         }
 
         get("/session-all") {
-            val request = call.receive<SessionIdRequest>()
-            val timeTables = timeTableService.getSessionsTimetables(request.sessionId)
+            val request = call.receive<IdRequest>()
+            val timeTables = timeTableService.getSessionsTimetables(request.id)
             call.respond(
                 HttpStatusCode.OK,
                 timeTables.map { it.toResponse() }

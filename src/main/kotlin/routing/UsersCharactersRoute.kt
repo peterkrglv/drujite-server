@@ -8,8 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.CharacterModel
 import requests.AddUserSessionCharacter
-import requests.GetUsersSessionCharacter
-import requests.SessionIdRequest
+import requests.IdRequest
 import responses.CharacterResponse
 import services.JwtService
 import services.UsersSessionsService
@@ -20,13 +19,13 @@ fun Route.usersCharactersRoute(
 ) {
     authenticate {
         get {
-            val characterRequest = call.receive<GetUsersSessionCharacter>()
+            val characterRequest = call.receive<IdRequest>()
             val principal = call.principal<JWTPrincipal>()
             val userId =
                 principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val character = usersSessionsService.getCharacter(
                 userId = userId,
-                sessionId = characterRequest.sessionId
+                sessionId = characterRequest.id
             )
             if (character == null) {
                 call.respond(HttpStatusCode.NotFound)
@@ -58,8 +57,8 @@ fun Route.usersCharactersRoute(
         }
 
         get("session-all") {
-            val request = call.receive<SessionIdRequest>()
-            val characters = usersSessionsService.getSessionsCharacters(request.sessionId)
+            val request = call.receive<IdRequest>()
+            val characters = usersSessionsService.getSessionsCharacters(request.id)
             call.respond(HttpStatusCode.OK, characters.map { it.toResponse() })
         }
 

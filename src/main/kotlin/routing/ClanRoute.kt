@@ -8,8 +8,7 @@ import io.ktor.server.routing.*
 import models.ClanModel
 import requests.AddClanRequest
 import requests.AddClanToSessionRequest
-import requests.ClanIdRequest
-import requests.SessionIdRequest
+import requests.IdRequest
 import responses.ClanResponse
 import responses.IdResponse
 import services.ClanService
@@ -19,8 +18,8 @@ fun Route.clanRoute(
 ) {
     authenticate {
         get() {
-            val request = call.receive<ClanIdRequest>()
-            val clan = clanService.getClan(request.clanId)
+            val request = call.receive<IdRequest>()
+            val clan = clanService.getClan(request.id)
             if (clan == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {
@@ -36,8 +35,8 @@ fun Route.clanRoute(
         }
 
         delete() {
-            val request = call.receive<ClanIdRequest>()
-            val result = clanService.deleteClan(request.clanId)
+            val request = call.receive<IdRequest>()
+            val result = clanService.deleteClan(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -56,8 +55,8 @@ fun Route.clanRoute(
         }
 
         get("/session-all") {
-            val request = call.receive<SessionIdRequest>()
-            val clans = clanService.getSessionsClans(request.sessionId)
+            val request = call.receive<IdRequest>()
+            val clans = clanService.getSessionsClans(request.id)
             call.respond(HttpStatusCode.OK, clans.map { it.toResponse() })
         }
     }

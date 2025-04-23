@@ -8,10 +8,10 @@ VALUES
     ('Община Воинэж', ''),
     ('Община Хассалех', '');
 
-INSERT INTO sessions_clans (session_id, clan_id)
-SELECT s.id, c.id
-FROM clans c
-         CROSS JOIN (SELECT 3 AS id UNION SELECT 6 AS id) s;
+--users
+INSERT INTO users (id, username, phone, password, gender)
+VALUES
+    (1, 'Илья Коданёв', '88005553535', '12345', 'M');
 
 -- characters
 INSERT INTO characters (clan_id, name, story, image_url)
@@ -43,3 +43,9 @@ VALUES
     ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 8, 1),
     ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 7, 2),
     ('bc67da6b-10c3-4d8f-9156-aa75fabd070a', 9, 3);
+
+--users_sessions
+INSERT INTO users_sessions (user_id, session_id, character_id)
+VALUES
+    (1, 3, 1),
+    (1, 6, 1);

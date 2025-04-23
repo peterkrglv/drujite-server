@@ -7,8 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.NewsModel
 import requests.AddNewsRequest
-import requests.NewsIdRequest
-import requests.SessionIdRequest
+import requests.IdRequest
 import responses.IdResponse
 import responses.NewsResponse
 import services.NewsService
@@ -27,8 +26,8 @@ fun Route.newsRoute(
         }
 
         delete() {
-            val request = call.receive<NewsIdRequest>()
-            val result = newsService.delete(request.newsId)
+            val request = call.receive<IdRequest>()
+            val result = newsService.delete(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -37,8 +36,8 @@ fun Route.newsRoute(
         }
 
         get() {
-            val request = call.receive<NewsIdRequest>()
-            val news = newsService.get(request.newsId)
+            val request = call.receive<IdRequest>()
+            val news = newsService.get(request.id)
             if (news != null) {
                 call.respond(HttpStatusCode.OK, news.toResponse())
             } else {
@@ -47,8 +46,8 @@ fun Route.newsRoute(
         }
 
         get("/session") {
-            val request = call.receive<SessionIdRequest>()
-            val newsList = newsService.getSessionsNews(request.sessionId)
+            val request = call.receive<IdRequest>()
+            val newsList = newsService.getSessionsNews(request.id)
             if (newsList.isNotEmpty()) {
                 call.respond(HttpStatusCode.OK, newsList.map { it.toResponse() })
             } else {

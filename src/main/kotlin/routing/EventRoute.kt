@@ -7,7 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.EventModel
 import requests.AddEventRequest
-import requests.EventIdRequest
+import requests.IdRequest
 import requests.GetTimetableBySessionAndDate
 import responses.EventResponse
 import responses.IdResponse
@@ -30,8 +30,8 @@ fun Route.eventRoute(
         }
 
         delete() {
-            val request = call.receive<EventIdRequest>()
-            val result = timeTableService.deleteEvent(request.eventId)
+            val request = call.receive<IdRequest>()
+            val result = timeTableService.deleteEvent(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -40,8 +40,8 @@ fun Route.eventRoute(
         }
 
         get() {
-            val request = call.receive<EventIdRequest>()
-            val event = timeTableService.getEvent(request.eventId)
+            val request = call.receive<IdRequest>()
+            val event = timeTableService.getEvent(request.id)
             if (event != null) {
                 call.respond(HttpStatusCode.OK, event.toResponse())
             } else {

@@ -3,7 +3,6 @@ package services
 import db.repos.GoalRepository
 import models.GoalModel
 import requests.AddGoalRequest
-import requests.GoalRequest
 
 class GoalService(
     private val goalRepository: GoalRepository,

@@ -122,8 +122,7 @@ CREATE TABLE clans
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
---!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-ALTER TABLE clans ALTER COLUMN description DROP NOT NULL;
+
 
 CREATE TRIGGER update_clan_modtime
     BEFORE UPDATE

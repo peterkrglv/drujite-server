@@ -7,7 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.CharacterModel
 import requests.AddCharacterRequest
-import requests.CharacterIdRequest
+import requests.IdRequest
 import responses.CharacterResponse
 import responses.IdResponse
 import services.CharacterService
@@ -17,8 +17,8 @@ fun Route.characterRoute(
 ) {
     authenticate {
         get() {
-            val request = call.receive<CharacterIdRequest>()
-            val character = characterService.getCharacter(request.characterId)
+            val request = call.receive<IdRequest>()
+            val character = characterService.getCharacter(request.id)
             if (character == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {
@@ -40,8 +40,8 @@ fun Route.characterRoute(
         }
 
         delete {
-            val request = call.receive<CharacterIdRequest>()
-            val result = characterService.deleteCharacter(request.characterId)
+            val request = call.receive<IdRequest>()
+            val result = characterService.deleteCharacter(request.id)
             if (result) {
                 call.respond(HttpStatusCode.OK)
             } else {
@@ -50,8 +50,8 @@ fun Route.characterRoute(
         }
 
         get("/withClanAndUser") {
-            val request = call.receive<CharacterIdRequest>()
-            val character = characterService.getCharacterWithClanAndUser(request.characterId)
+            val request = call.receive<IdRequest>()
+            val character = characterService.getCharacterWithClanAndUser(request.id)
             if (character == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {

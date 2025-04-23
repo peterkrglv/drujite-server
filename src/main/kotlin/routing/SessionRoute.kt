@@ -7,7 +7,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.SessionModel
-import requests.SessionIdRequest
+import requests.IdRequest
 import requests.SessionRequest
 import responses.SessionResponse
 import services.JwtService
@@ -32,8 +32,8 @@ fun Route.sessionRoute(
         }
 
         get {
-            val request = call.receive<SessionIdRequest>()
-            val session = sessionService.getSession(request.sessionId)
+            val request = call.receive<IdRequest>()
+            val session = sessionService.getSession(request.id)
                 ?: return@get call.respond(HttpStatusCode.NotFound)
             call.respond(HttpStatusCode.OK, session.toResponse())
         }
@@ -45,8 +45,8 @@ fun Route.sessionRoute(
         }
 
         delete {
-            val request = call.receive<SessionIdRequest>()
-            sessionService.deleteSession(request.sessionId)
+            val request = call.receive<IdRequest>()
+            sessionService.deleteSession(request.id)
             call.respond(HttpStatusCode.NoContent)
         }
 
