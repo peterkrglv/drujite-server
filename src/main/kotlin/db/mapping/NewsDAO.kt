@@ -30,6 +30,6 @@ fun daoToModel(dao: NewsDAO) = NewsModel(
     sessionId = dao.sessionId,
     title = dao.title,
     content = dao.content,
-    time = dao.time.toString(),
+    dateTime = dao.time.toString(),
     imageUrl = dao.imageUrl
 )

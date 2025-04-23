@@ -8,8 +8,8 @@ import io.ktor.server.routing.*
 import models.CharacterModel
 import requests.AddCharacterRequest
 import requests.CharacterIdRequest
-import responces.CharacterResponse
-import responces.IdResponse
+import responses.CharacterResponse
+import responses.IdResponse
 import services.CharacterService
 
 fun Route.characterRoute(

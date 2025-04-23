@@ -5,6 +5,7 @@ import db.repos_impls.*
 import io.ktor.server.application.*
 import routing.configureRouting
 import services.*
+import util.configureHTTP
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -20,6 +21,7 @@ fun Application.module() {
     val timeTableRepository = TimeTableRepositoryImpl()
     val eventRepository = EventRepositoryImpl()
     val clanRepository = ClanRepositoryImpl()
+    val newsRepository = NewsRepositoryImpl()
 
 
     val userService = UserService(userRepository)
@@ -30,9 +32,11 @@ fun Application.module() {
     val goalService = GoalService(goalRepository)
     val timeTableService = TimeTableService(timeTableRepository, eventRepository)
     val clanService = ClanService(clanRepository)
+    val newsService = NewsService(newsRepository)
 
     configureSerialization()
     configureSecurity(jwtService)
+    configureHTTP()
     configureRouting(
         userService,
         jwtService,
@@ -41,7 +45,8 @@ fun Application.module() {
         characterService,
         goalService,
         timeTableService,
-        clanService
+        clanService,
+        newsService
     )
     configureDatabases()
     configureMonitoring()

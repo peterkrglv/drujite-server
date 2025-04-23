@@ -10,8 +10,8 @@ import requests.AddClanRequest
 import requests.AddClanToSessionRequest
 import requests.ClanIdRequest
 import requests.SessionIdRequest
-import responces.ClanResponse
-import responces.IdResponse
+import responses.ClanResponse
+import responses.IdResponse
 import services.ClanService
 
 fun Route.clanRoute(

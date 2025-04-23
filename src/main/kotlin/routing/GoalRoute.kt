@@ -9,8 +9,8 @@ import models.GoalModel
 import requests.AddGoalRequest
 import requests.CharacterIdRequest
 import requests.GoalRequest
-import responces.GoalResponse
-import responces.IdResponse
+import responses.GoalResponse
+import responses.IdResponse
 import services.GoalService
 
 

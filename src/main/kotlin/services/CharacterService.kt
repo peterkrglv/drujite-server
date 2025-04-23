@@ -2,10 +2,9 @@ package services
 
 import db.repos.CharacterRepository
 import db.repos.ClanRepository
-import db.repos.UserRepository
 import db.repos.UsersSessionsRepository
 import models.CharacterModel
-import responces.UserCharacterResponse
+import responses.UserCharacterResponse
 
 class CharacterService(
     private val characterRepository: CharacterRepository,

@@ -1,7 +1,5 @@
 package models
 
-import responces.CharacterResponse
-
 data class CharacterModel (
     val id: Int,
     val name: String,

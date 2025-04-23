@@ -9,8 +9,8 @@ import models.EventModel
 import requests.AddEventRequest
 import requests.EventIdRequest
 import requests.GetTimetableBySessionAndDate
-import responces.EventResponse
-import responces.IdResponse
+import responses.EventResponse
+import responses.IdResponse
 import services.TimeTableService
 
 fun Route.eventRoute(

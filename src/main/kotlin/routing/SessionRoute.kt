@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import models.SessionModel
 import requests.SessionIdRequest
 import requests.SessionRequest
-import responces.SessionResponse
+import responses.SessionResponse
 import services.JwtService
 import services.SessionService
 

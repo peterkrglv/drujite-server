@@ -8,7 +8,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.SessionModel
 import requests.UserSession
-import responces.SessionResponse
+import responses.SessionResponse
 import services.JwtService
 import services.UsersSessionsService
 

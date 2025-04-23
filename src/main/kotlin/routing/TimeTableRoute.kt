@@ -9,8 +9,8 @@ import models.TimeTableModel
 import requests.AddTimeTableRequest
 import requests.SessionIdRequest
 import requests.TimeTableIdRequest
-import responces.IdResponse
-import responces.TimeTableResponse
+import responses.IdResponse
+import responses.TimeTableResponse
 import services.TimeTableService
 
 fun Route.timeTableRoute(

@@ -2,9 +2,10 @@ package routing
 
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
+import io.ktor.server.plugins.openapi.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import ru.drujite.routing.authRoute
 import services.*
 
@@ -16,14 +17,11 @@ fun Application.configureRouting(
     characterService: CharacterService,
     goalService: GoalService,
     timeTableService: TimeTableService,
-    clanService: ClanService
+    clanService: ClanService,
+    newsService: NewsService
 ) {
     val v1 = "/api/v1/"
     routing {
-        static("/static") {
-            resources("static")
-        }
-
         route(v1 + "user") {
             userRoute(userService, jwtService)
         }
@@ -68,8 +66,11 @@ fun Application.configureRouting(
             clanRoute(clanService = clanService)
         }
 
+        route(v1 + "news") {
+            newsRoute(newsService)
+        }
+
         get(v1) {
-            environment.log.info("Heloo")
             call.respondText(
                 """
                 <html>

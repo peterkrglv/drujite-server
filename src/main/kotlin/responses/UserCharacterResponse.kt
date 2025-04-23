@@ -1,12 +1,13 @@
-package responces
+package responses
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CharacterResponse (
+data class UserCharacterResponse(
     val id: Int,
     val name: String,
+    val player: String,
     val story: String,
-    val clanId: Int,
+    val clan: String,
     val imageUrl: String?
 )

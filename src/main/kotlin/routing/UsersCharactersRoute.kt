@@ -10,7 +10,7 @@ import models.CharacterModel
 import requests.AddUserSessionCharacter
 import requests.GetUsersSessionCharacter
 import requests.SessionIdRequest
-import responces.CharacterResponse
+import responses.CharacterResponse
 import services.JwtService
 import services.UsersSessionsService
 

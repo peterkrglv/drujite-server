@@ -1,10 +1,11 @@
-package models
+package requests
 
-data class NewsModel (
-    val id: Int,
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AddNewsRequest (
     val sessionId: Int,
     val title: String,
     val content: String,
-    val dateTime: String,
     val imageUrl: String? = null,
 )
