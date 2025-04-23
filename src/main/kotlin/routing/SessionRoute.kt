@@ -7,9 +7,9 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.SessionModel
-import requests.GetSession
+import requests.IdRequest
 import requests.SessionRequest
-import responces.SessionResponse
+import responses.SessionResponse
 import services.JwtService
 import services.SessionService
 
@@ -17,13 +17,25 @@ fun Route.sessionRoute(
     jwtService: JwtService,
     sessionService: SessionService,
 ) {
-
     authenticate {
         get("/user-sessions") {
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val userId =
+                principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val sessions = sessionService.getSessionsByUserId(userId)
             call.respond(HttpStatusCode.OK, sessions.map { it.toResponse() })
+        }
+
+        get("/all") {
+            val sessions = sessionService.getAllSessions()
+            call.respond(HttpStatusCode.OK, sessions.map { it.toResponse() })
+        }
+
+        get {
+            val request = call.receive<IdRequest>()
+            val session = sessionService.getSession(request.id)
+                ?: return@get call.respond(HttpStatusCode.NotFound)
+            call.respond(HttpStatusCode.OK, session.toResponse())
         }
 
         post {
@@ -33,10 +45,8 @@ fun Route.sessionRoute(
         }
 
         delete {
-            val id = call.parameters["id"]?.toIntOrNull()
-                ?: return@delete call.respond(HttpStatusCode.BadRequest)
-
-            sessionService.deleteSession(id)
+            val request = call.receive<IdRequest>()
+            sessionService.deleteSession(request.id)
             call.respond(HttpStatusCode.NoContent)
         }
 
@@ -49,7 +59,7 @@ private fun SessionRequest.toResponse(): SessionResponse = SessionResponse(
     description = this.description,
     startDate = this.startDate,
     endDate = this.endDate,
-    imageUrl = this.imageUrl
+    imageUrl = this.image
 )
 
 private fun SessionModel.toResponse(): SessionResponse {

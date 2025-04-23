@@ -5,6 +5,6 @@ data class NewsModel (
     val sessionId: Int,
     val title: String,
     val content: String,
-    val time: String,
+    val dateTime: String,
     val imageUrl: String? = null,
 )

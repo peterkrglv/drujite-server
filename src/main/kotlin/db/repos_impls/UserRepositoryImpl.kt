@@ -9,7 +9,7 @@ import ru.drujite.models.UserModel
 import java.util.*
 
 class UserRepositoryImpl : UserRepository {
-    override suspend fun getById(id: UUID): UserModel? {
+    override suspend fun get(id: UUID): UserModel? {
         return suspendTransaction {
             UserDAO.findById(id)?.let { daoToModel(it) }
         }
@@ -21,7 +21,7 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    override suspend fun addUser(user: UserModel): UserModel? {
+    override suspend fun add(user: UserModel): UserModel? {
         return suspendTransaction {
             UserDAO.new {
                 username = user.username
@@ -29,6 +29,15 @@ class UserRepositoryImpl : UserRepository {
                 password = user.password
                 gender = user.gender
             }.let { daoToModel(it) }
+        }
+    }
+
+    override suspend fun delete(id: UUID): Boolean {
+        return suspendTransaction {
+            UserDAO.findById(id)?.let {
+                it.delete()
+                true
+            } ?: false
         }
     }
 }

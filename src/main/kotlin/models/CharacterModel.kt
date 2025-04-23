@@ -7,3 +7,4 @@ data class CharacterModel (
     val clanId: Int,
     val imageUrl: String? = null
 )
+

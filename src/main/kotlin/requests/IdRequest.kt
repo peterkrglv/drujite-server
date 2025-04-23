@@ -3,6 +3,6 @@ package requests
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetSession(
+data class IdRequest (
     val id: Int
 )

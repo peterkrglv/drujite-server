@@ -7,8 +7,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import models.SessionModel
-import requests.UserSession
-import responces.SessionResponse
+import requests.IdRequest
+import responses.SessionResponse
 import services.JwtService
 import services.UsersSessionsService
 
@@ -25,10 +25,10 @@ fun Route.usersSessionsRoute(
         }
 
         post {
-            val sessionRequest = call.receive<UserSession>()
+            val sessionRequest = call.receive<IdRequest>()
             val principal = call.principal<JWTPrincipal>()
             val userId = principal?.let { jwtService.extractId(it) } ?: return@post call.respond(HttpStatusCode.Unauthorized)
-            usersSessionsService.addUserSession(userId = userId, sessionId = sessionRequest.sessionId)
+            usersSessionsService.addUserSession(userId = userId, sessionId = sessionRequest.id)
             call.respond(HttpStatusCode.Created)
         }
     }

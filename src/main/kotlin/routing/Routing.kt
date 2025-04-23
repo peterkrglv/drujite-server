@@ -2,74 +2,75 @@ package routing
 
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
+import io.ktor.server.plugins.openapi.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import ru.drujite.routing.authRoute
-import services.JwtService
-import services.SessionService
-import services.UserService
-import services.UsersSessionsService
+import services.*
 
 fun Application.configureRouting(
     userService: UserService,
     jwtService: JwtService,
     sessionService: SessionService,
-    usersSessionsService: UsersSessionsService
+    usersSessionsService: UsersSessionsService,
+    characterService: CharacterService,
+    goalService: GoalService,
+    timeTableService: TimeTableService,
+    clanService: ClanService,
+    newsService: NewsService
 ) {
+    val v1 = "/api/v1/"
     routing {
-        static("/static") {
-            resources("static")
-        }
-
-        route("/api/v1/user") {
+        route(v1 + "user") {
             userRoute(userService, jwtService)
         }
 
-        route("/api/v1/auth") {
+        route(v1 + "auth") {
             authRoute(jwtService)
         }
 
-        route("/api/v1/signup") {
+        route(v1 + "signup") {
             signupRoute(jwtService, userService)
         }
 
-        route("/api/v1/session") {
+        route(v1 + "session") {
             sessionRoute(jwtService, sessionService)
         }
 
-        route("/api/v1/users-sessions") {
+        route(v1 + "users-sessions") {
             usersSessionsRoute(jwtService, usersSessionsService)
         }
 
+        route(v1 + "users-characters") {
+            usersCharactersRoute(jwtService, usersSessionsService)
+        }
 
-//        get("/api/v1/db") {
-//            //html page with db credentials from env
-//            val dbUrl = System.getenv("DB_URL")
-//            val dbUser = System.getenv("POSTGRES_USER")
-//            val dbPassword = System.getenv("POSTGRES_PASSWORD")
-//            call.respondText(
-//                """
-//                    <html>
-//                        <head>
-//                            <title>DB Credentials</title>
-//                            <link rel="stylesheet" type="text/css" href="/static/styles.css">
-//                        </head>
-//                        <body>
-//                            <h1>DB Credentials</h1>
-//                            <p>URL: $dbUrl</p>
-//                            <p>User: $dbUser</p>
-//                            <p>Password: $dbPassword</p>
-//                        </body>
-//                    </html>
-//                    """.trimIndent(),
-//                ContentType.Text.Html
-//            )
-//
-//        }
+        route(v1 + "character") {
+            characterRoute(characterService)
+        }
 
-        get("/api/v1/") {
-            environment.log.info("Heloo")
+        route (v1 + "goal") {
+            goalRoute(goalService)
+        }
+
+        route(v1 + "timetable") {
+            timeTableRoute(timeTableService)
+        }
+
+        route(v1 + "event") {
+            eventRoute(timeTableService)
+        }
+
+        route(v1 + "clan") {
+            clanRoute(clanService = clanService)
+        }
+
+        route(v1 + "news") {
+            newsRoute(newsService)
+        }
+
+        get(v1) {
             call.respondText(
                 """
                 <html>

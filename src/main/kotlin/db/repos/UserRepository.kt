@@ -4,7 +4,8 @@ import ru.drujite.models.UserModel
 import java.util.*
 
 interface UserRepository {
-    suspend fun getById(id: UUID): UserModel?
+    suspend fun get(id: UUID): UserModel?
     suspend fun getByPhone(phone: String): UserModel?
-    suspend fun addUser(user: UserModel): UserModel?
+    suspend fun add(user: UserModel): UserModel?
+    suspend fun delete(id: UUID): Boolean
 }
