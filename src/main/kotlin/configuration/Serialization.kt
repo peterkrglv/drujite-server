@@ -1,4 +1,4 @@
-package ru.drujite
+package ru.drujite.configuration
 
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*

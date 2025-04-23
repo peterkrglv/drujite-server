@@ -1,3 +1,5 @@
+package configuration
+
 import io.ktor.server.application.*
 import org.jetbrains.exposed.sql.Database
 
