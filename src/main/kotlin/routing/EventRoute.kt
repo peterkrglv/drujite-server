@@ -49,7 +49,7 @@ fun Route.eventRoute(
             }
         }
 
-        get("/session-date") {
+        post("/session-date") {
             val request = call.receive<GetTimetableBySessionAndDate>()
             val events = timeTableService.getEventsBySessionAndDate(request.sessionId, request.date)
             if (events.isNotEmpty()) {
