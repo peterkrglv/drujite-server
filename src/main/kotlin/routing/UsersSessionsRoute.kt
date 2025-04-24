@@ -15,11 +15,12 @@ import services.UsersSessionsService
 fun Route.usersSessionsRoute(
     jwtService: JwtService,
     usersSessionsService: UsersSessionsService,
-    ) {
+) {
     authenticate {
         get {
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val userId =
+                principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val sessions = usersSessionsService.getUsersSessions(userId)
             call.respond(HttpStatusCode.OK, sessions.map { it.toResponse() })
         }
@@ -27,7 +28,8 @@ fun Route.usersSessionsRoute(
         post {
             val sessionRequest = call.receive<IdRequest>()
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.let { jwtService.extractId(it) } ?: return@post call.respond(HttpStatusCode.Unauthorized)
+            val userId =
+                principal?.let { jwtService.extractId(it) } ?: return@post call.respond(HttpStatusCode.Unauthorized)
             usersSessionsService.addUserSession(userId = userId, sessionId = sessionRequest.id)
             call.respond(HttpStatusCode.Created)
         }
@@ -35,7 +37,7 @@ fun Route.usersSessionsRoute(
 }
 
 private fun SessionModel.toResponse(): SessionResponse = SessionResponse(
-    id = 0,
+    id = this.id,
     name = this.name,
     description = this.description,
     startDate = this.startDate,
