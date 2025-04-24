@@ -78,13 +78,15 @@ CREATE TABLE events
 (
     id          SERIAL PRIMARY KEY,
     timetable_id INT REFERENCES timetables (id) ON DELETE CASCADE,
-    num         INT NOT NULL,
+    num         INT,
     name        VARCHAR(65) NOT NULL,
     time        TIME WITHOUT TIME ZONE NOT NULL,
     is_title     BOOLEAN DEFAULT FALSE,
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
+ALTER TABLE events
+    ALTER COLUMN time DROP NOT NULL;
 
 CREATE TRIGGER update_events_modtime
     BEFORE UPDATE

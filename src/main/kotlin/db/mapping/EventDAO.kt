@@ -11,7 +11,7 @@ object EventTable: IntIdTable("events") {
     val timetableId = integer("timetable_id").references(TimeTable.id)
     val num = integer("num")
     val name = varchar("name", 255)
-    val time = time("time")
+    val time = time("time").nullable()
     val isTitle = bool("is_title")
 }
 
