@@ -51,7 +51,7 @@ fun Route.characterRoute(
             }
         }
 
-        get("/withClanAndUser") {
+        get("/with-clan-and-player") {
             val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
                 HttpStatusCode.BadRequest
             )
