@@ -48,7 +48,7 @@ fun Route.newsRoute(
         }
 
         get("/session") {
-            val sessionId = call.request.queryParameters["sessiondId"]?.toIntOrNull() ?: return@get call.respond(
+            val sessionId = call.request.queryParameters["sessionId"]?.toIntOrNull() ?: return@get call.respond(
                 HttpStatusCode.BadRequest
             )
             val newsList = newsService.getSessionsNews(sessionId)

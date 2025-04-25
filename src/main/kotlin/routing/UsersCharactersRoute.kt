@@ -6,10 +6,7 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import models.CharacterModel
 import requests.AddUserSessionCharacter
-import requests.IdRequest
-import responses.CharacterResponse
 import services.CharacterService
 import services.JwtService
 import services.UsersSessionsService
@@ -55,15 +52,16 @@ fun Route.usersCharactersRoute(
             val userId =
                 principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val characters = usersSessionsService.getCharacters(userId)
-            call.respond(HttpStatusCode.OK, characters.map { it.toResponse() })
-
+            val response = characters.map { characterService.getCharacterWithClanAndUser(it.id) }
+            call.respond(HttpStatusCode.OK, response)
         }
 
         get("session-all") {
             val id = call.request.queryParameters["id"]?.toIntOrNull()
                 ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid or missing 'id' parameter")
             val characters = usersSessionsService.getSessionsCharacters(id)
-            call.respond(HttpStatusCode.OK, characters.map { it.toResponse() })
+            val response = characters.map { characterService.getCharacterWithClanAndUser(it.id) }
+            call.respond(HttpStatusCode.OK, response)
         }
 
         delete {
@@ -84,12 +82,3 @@ fun Route.usersCharactersRoute(
         }
     }
 }
-
-private fun CharacterModel.toResponse() =
-    CharacterResponse(
-        id = id,
-        name = name,
-        story = story,
-        clanId = clanId,
-        imageUrl = imageUrl
-    )
