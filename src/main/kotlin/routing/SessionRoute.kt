@@ -32,8 +32,10 @@ fun Route.sessionRoute(
         }
 
         get {
-            val request = call.receive<IdRequest>()
-            val session = sessionService.getSession(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val session = sessionService.getSession(id)
                 ?: return@get call.respond(HttpStatusCode.NotFound)
             call.respond(HttpStatusCode.OK, session.toResponse())
         }

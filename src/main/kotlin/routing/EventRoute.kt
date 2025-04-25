@@ -40,8 +40,10 @@ fun Route.eventRoute(
         }
 
         get() {
-            val request = call.receive<IdRequest>()
-            val event = timeTableService.getEvent(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val event = timeTableService.getEvent(id)
             if (event != null) {
                 call.respond(HttpStatusCode.OK, event.toResponse())
             } else {

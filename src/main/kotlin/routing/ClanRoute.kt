@@ -18,8 +18,10 @@ fun Route.clanRoute(
 ) {
     authenticate {
         get() {
-            val request = call.receive<IdRequest>()
-            val clan = clanService.getClan(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val clan = clanService.getClan(id)
             if (clan == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {
@@ -55,8 +57,10 @@ fun Route.clanRoute(
         }
 
         get("/session-all") {
-            val request = call.receive<IdRequest>()
-            val clans = clanService.getSessionsClans(request.id)
+            val id = call.request.queryParameters["sessionId"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val clans = clanService.getSessionsClans(id)
             call.respond(HttpStatusCode.OK, clans.map { it.toResponse() })
         }
     }

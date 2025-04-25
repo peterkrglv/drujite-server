@@ -43,14 +43,14 @@ fun Application.configureRouting(
         }
 
         route(v1 + "users-characters") {
-            usersCharactersRoute(jwtService, usersSessionsService)
+            usersCharactersRoute(jwtService, usersSessionsService, characterService)
         }
 
         route(v1 + "character") {
             characterRoute(characterService)
         }
 
-        route (v1 + "goal") {
+        route(v1 + "goal") {
             goalRoute(goalService)
         }
 

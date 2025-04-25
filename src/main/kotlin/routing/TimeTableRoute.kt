@@ -33,8 +33,10 @@ fun Route.timeTableRoute(
         }
 
         get {
-            val request = call.receive<IdRequest>()
-            val timeTable = timeTableService.getTimeTable(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val timeTable = timeTableService.getTimeTable(id)
             if (timeTable != null) {
                 call.respond(HttpStatusCode.OK, timeTable.toResponse())
             } else {
@@ -43,8 +45,10 @@ fun Route.timeTableRoute(
         }
 
         get("/session-all") {
-            val request = call.receive<IdRequest>()
-            val timeTables = timeTableService.getSessionsTimetables(request.id)
+            val sessionId = call.request.queryParameters["sessionId"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val timeTables = timeTableService.getSessionsTimetables(sessionId)
             call.respond(
                 HttpStatusCode.OK,
                 timeTables.map { it.toResponse() }

@@ -18,8 +18,10 @@ fun Route.goalRoute(
 ) {
     authenticate {
         get() {
-            val request: IdRequest = call.receive<IdRequest>()
-            val goal = goalService.getGoal(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val goal = goalService.getGoal(id)
             if (goal != null) {
                 call.respond(goal.toResponse())
             } else {
@@ -44,8 +46,10 @@ fun Route.goalRoute(
         }
 
         get("/character-all") {
-            val request = call.receive<IdRequest>()
-            val goals = goalService.getCharacterGoals(request.id)
+            val characterId = call.request.queryParameters["characterId"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val goals = goalService.getCharacterGoals(characterId)
             call.respond(
                 HttpStatusCode.OK,
                 goals.map { it.toResponse() }

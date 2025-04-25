@@ -36,8 +36,10 @@ fun Route.newsRoute(
         }
 
         get() {
-            val request = call.receive<IdRequest>()
-            val news = newsService.get(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val news = newsService.get(id)
             if (news != null) {
                 call.respond(HttpStatusCode.OK, news.toResponse())
             } else {
@@ -46,8 +48,10 @@ fun Route.newsRoute(
         }
 
         get("/session") {
-            val request = call.receive<IdRequest>()
-            val newsList = newsService.getSessionsNews(request.id)
+            val sessionId = call.request.queryParameters["sessiondId"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val newsList = newsService.getSessionsNews(sessionId)
             if (newsList.isNotEmpty()) {
                 call.respond(HttpStatusCode.OK, newsList.map { it.toResponse() })
             } else {

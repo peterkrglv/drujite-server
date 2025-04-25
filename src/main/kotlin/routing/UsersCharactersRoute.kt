@@ -10,28 +10,31 @@ import models.CharacterModel
 import requests.AddUserSessionCharacter
 import requests.IdRequest
 import responses.CharacterResponse
+import services.CharacterService
 import services.JwtService
 import services.UsersSessionsService
 
 fun Route.usersCharactersRoute(
     jwtService: JwtService,
-    usersSessionsService: UsersSessionsService
+    usersSessionsService: UsersSessionsService,
+    characterService: CharacterService
 ) {
     authenticate {
         get {
-            val characterRequest = call.receive<IdRequest>()
+            val sessionId = call.request.queryParameters["sessionId"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
             val principal = call.principal<JWTPrincipal>()
             val userId =
                 principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val character = usersSessionsService.getCharacter(
                 userId = userId,
-                sessionId = characterRequest.id
+                sessionId = sessionId
+            ) ?: return@get call.respond(HttpStatusCode.NotFound)
+            val response = characterService.getCharacterWithClanAndUser(character.id) ?: return@get call.respond(
+                HttpStatusCode.NotFound
             )
-            if (character == null) {
-                call.respond(HttpStatusCode.NotFound)
-            } else {
-                call.respond(HttpStatusCode.OK, character.toResponse())
-            }
+            call.respond(HttpStatusCode.OK, response)
         }
 
         post {

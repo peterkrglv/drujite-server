@@ -52,8 +52,10 @@ fun Route.characterRoute(
         }
 
         get("/withClanAndUser") {
-            val request = call.receive<IdRequest>()
-            val character = characterService.getCharacterWithClanAndUser(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val character = characterService.getCharacterWithClanAndUser(id)
             if (character == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {
