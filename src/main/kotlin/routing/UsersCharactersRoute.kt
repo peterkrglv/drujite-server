@@ -57,8 +57,9 @@ fun Route.usersCharactersRoute(
         }
 
         get("session-all") {
-            val request = call.receive<IdRequest>()
-            val characters = usersSessionsService.getSessionsCharacters(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull()
+                ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid or missing 'id' parameter")
+            val characters = usersSessionsService.getSessionsCharacters(id)
             call.respond(HttpStatusCode.OK, characters.map { it.toResponse() })
         }
 

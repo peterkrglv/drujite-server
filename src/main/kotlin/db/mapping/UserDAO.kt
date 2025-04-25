@@ -8,7 +8,7 @@ import java.util.*
 object UserTable : UUIDTable("users") {
     val phone = varchar("phone", 15).uniqueIndex()
     val username = varchar("username", 255)
-    val password = varchar("password", 255) // Увеличена длина для соответствия SQL
+    val password = varchar("password", 255)
     val gender = varchar("gender", 15)
 }
 

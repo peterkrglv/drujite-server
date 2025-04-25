@@ -17,8 +17,10 @@ fun Route.characterRoute(
 ) {
     authenticate {
         get() {
-            val request = call.receive<IdRequest>()
-            val character = characterService.getCharacter(request.id)
+            val id = call.request.queryParameters["id"]?.toIntOrNull() ?: return@get call.respond(
+                HttpStatusCode.BadRequest
+            )
+            val character = characterService.getCharacter(id)
             if (character == null) {
                 call.respond(HttpStatusCode.NotFound)
             } else {
