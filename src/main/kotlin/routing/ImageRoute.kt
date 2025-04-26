@@ -53,6 +53,25 @@ fun Route.imageRoute(imageService: ImageService) {
                 call.respond(HttpStatusCode.BadRequest, "Invalid file upload")
             }
         }
+
+        post("/{entityType}/{id}/binary") {
+            val entityType = call.parameters["entityType"] ?: return@post call.respond(
+                HttpStatusCode.BadRequest,
+                "Entity type is required"
+            )
+            val id = call.parameters["id"]?.toIntOrNull() ?: return@post call.respond(
+                HttpStatusCode.BadRequest,
+                "Invalid ID"
+            )
+
+            val fileBytes = call.receive<ByteArray>()
+            val success = imageService.saveImage(entityType, id, fileBytes, "jpg")
+            if (success) {
+                call.respond(HttpStatusCode.OK, "Image uploaded successfully")
+            } else {
+                call.respond(HttpStatusCode.InternalServerError, "Failed to save image")
+            }
+        }
     }
 
     get("/{entityType}/{id}") {
