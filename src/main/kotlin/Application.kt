@@ -7,6 +7,7 @@ import routing.configureRouting
 import ru.drujite.configuration.configureMonitoring
 import ru.drujite.configuration.configureSecurity
 import ru.drujite.configuration.configureSerialization
+import ru.drujite.services.ImageService
 import services.*
 
 fun main(args: Array<String>) {
@@ -35,6 +36,7 @@ fun Application.module() {
     val timeTableService = TimeTableService(timeTableRepository, eventRepository)
     val clanService = ClanService(clanRepository)
     val newsService = NewsService(newsRepository)
+    val imageService = ImageService(characterRepository, newsRepository, sessionRepository)
 
     configureSerialization()
     configureSecurity(jwtService)
@@ -47,7 +49,8 @@ fun Application.module() {
         goalService,
         timeTableService,
         clanService,
-        newsService
+        newsService,
+        imageService
     )
     configureDatabases()
     configureMonitoring()

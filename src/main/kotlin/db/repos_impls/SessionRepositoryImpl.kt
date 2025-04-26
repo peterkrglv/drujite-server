@@ -45,4 +45,14 @@ class SessionRepositoryImpl : SessionRepository {
             SessionDAO.all().map(::daoToModel)
         }
     }
+
+    override suspend fun addImageUrl(sessionId: Int, imageUrl: String): Boolean {
+        return suspendTransaction {
+            SessionDAO.findById(sessionId)?.let {
+                it.imageUrl = imageUrl
+                it.flush()
+                true
+            } ?: false
+        }
+    }
 }

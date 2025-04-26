@@ -47,4 +47,16 @@ class NewsRepositoryImpl : NewsRepository {
                 .map { daoToModel(it) }
         }
     }
+
+    override suspend fun addImageUrl(id: Int, imageUrl: String): Boolean {
+        return suspendTransaction {
+            val dao = NewsDAO.findById(id)
+            if (dao != null) {
+                dao.imageUrl = imageUrl
+                true
+            } else {
+                false
+            }
+        }
+    }
 }

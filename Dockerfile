@@ -34,7 +34,11 @@ COPY --from=builder /app/build/libs/*-all.jar /app/app.jar
 # COPY .env /app/.env
 COPY ./application.yaml /app/application.yaml
 
-CMD ["echo", "$JWT_SECRET"]
+##storage for images
+RUN mkdir -p /app/storage/images/sessions \
+    && mkdir -p /app/storage/images/characters \
+    && mkdir -p /app/storage/images/news
+
 CMD ["echo", "hello world"]
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

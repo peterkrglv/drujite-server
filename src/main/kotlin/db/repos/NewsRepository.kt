@@ -7,4 +7,5 @@ interface NewsRepository {
     suspend fun get(id: Int): NewsModel?
     suspend fun delete(id: Int): Boolean
     suspend fun getSessionsNews(sessionId: Int): List<NewsModel>
+    suspend fun addImageUrl(id: Int, imageUrl: String): Boolean
 }
