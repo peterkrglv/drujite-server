@@ -36,4 +36,13 @@ class CharacterRepositoryImpl: CharacterRepository {
             CharacterDAO.findById(id)?.delete() != null
         }
     }
+
+    override suspend fun addImageUrl(id: Int, imageUrl: String): Boolean {
+        return suspendTransaction {
+            CharacterDAO.findById(id)?.let {
+                it.imageUrl = imageUrl
+                true
+            } ?: false
+        }
+    }
 }

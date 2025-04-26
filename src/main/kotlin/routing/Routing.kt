@@ -7,6 +7,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
 import ru.drujite.routing.authRoute
+import ru.drujite.routing.imageRoute
+import ru.drujite.services.ImageService
 import services.*
 
 fun Application.configureRouting(
@@ -18,7 +20,8 @@ fun Application.configureRouting(
     goalService: GoalService,
     timeTableService: TimeTableService,
     clanService: ClanService,
-    newsService: NewsService
+    newsService: NewsService,
+    imageService: ImageService
 ) {
     val v1 = "/api/v1/"
     routing {
@@ -68,6 +71,10 @@ fun Application.configureRouting(
 
         route(v1 + "news") {
             newsRoute(newsService)
+        }
+
+        route(v1 + "images") {
+            imageRoute(imageService)
         }
 
         get(v1) {
