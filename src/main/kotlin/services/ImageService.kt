@@ -19,7 +19,7 @@ class ImageService(
 
         File(filePath).outputStream().use { it.write(fileBytes) }
 
-        val imageUrl = "/images/$entityType/$id"
+        val imageUrl = "images/$entityType/$id"
         return when (entityType) {
             "characters" -> characterRepository.addImageUrl(id, imageUrl)
             "news" -> newsRepository.addImageUrl(id, imageUrl)

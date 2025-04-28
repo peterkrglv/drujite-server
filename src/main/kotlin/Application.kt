@@ -32,7 +32,7 @@ fun Application.module() {
     val sessionService = SessionService(sessionRepository)
     val usersSessionService = UsersSessionsService(usersSessionRepository, characterRepository)
     val characterService = CharacterService(characterRepository, usersSessionRepository, clanRepository)
-    val goalService = GoalService(goalRepository)
+    val goalService = GoalService(goalRepository, usersSessionRepository)
     val timeTableService = TimeTableService(timeTableRepository, eventRepository)
     val clanService = ClanService(clanRepository)
     val newsService = NewsService(newsRepository)

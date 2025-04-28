@@ -2,6 +2,7 @@ package routing
 
 import io.ktor.http.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -11,10 +12,12 @@ import requests.IdRequest
 import responses.GoalResponse
 import responses.IdResponse
 import services.GoalService
+import services.JwtService
 
 
 fun Route.goalRoute(
-    goalService: GoalService
+    goalService: GoalService,
+    jwtService: JwtService,
 ) {
     authenticate {
         get() {
@@ -31,7 +34,7 @@ fun Route.goalRoute(
 
         post() {
             val request = call.receive<AddGoalRequest>()
-            val goalId = goalService.addGoal(request)
+            val goalId = goalService.addGoal(request)?: return@post call.respond(HttpStatusCode.BadRequest)
             call.respond(HttpStatusCode.Created, IdResponse(goalId))
         }
 
@@ -46,10 +49,13 @@ fun Route.goalRoute(
         }
 
         get("/character-all") {
-            val characterId = call.request.queryParameters["characterId"]?.toIntOrNull() ?: return@get call.respond(
+            val principal = call.principal<JWTPrincipal>()
+            val userId =
+                principal?.let { jwtService.extractId(it) } ?: return@get call.respond(HttpStatusCode.Unauthorized)
+            val sessionId = call.request.queryParameters["sessionId"]?.toIntOrNull() ?: return@get call.respond(
                 HttpStatusCode.BadRequest
             )
-            val goals = goalService.getCharacterGoals(characterId)
+            val goals = goalService.getCharacterGoals(userId, sessionId)
             call.respond(
                 HttpStatusCode.OK,
                 goals.map { it.toResponse() }
@@ -70,7 +76,7 @@ fun Route.goalRoute(
 
 private fun GoalModel.toResponse() = GoalResponse(
     id = this.id,
-    characterId = this.characterId,
+    characterId = this.usersSessionId,
     name = this.name,
     isCompleted = this.isCompleted,
 )

@@ -54,7 +54,7 @@ fun Application.configureRouting(
         }
 
         route(v1 + "goal") {
-            goalRoute(goalService)
+            goalRoute(goalService, jwtService)
         }
 
         route(v1 + "timetable") {

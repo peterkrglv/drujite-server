@@ -152,24 +152,6 @@ CREATE TRIGGER update_characters_modtime
 EXECUTE PROCEDURE update_modified_column();
 
 
---goals
-CREATE TABLE goals
-(
-    id           SERIAL PRIMARY KEY,
-    character_id INT REFERENCES characters (id) ON DELETE CASCADE,
-    name         VARCHAR(255) NOT NULL,
-    is_completed  BOOLEAN DEFAULT FALSE,
-    created_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
-    updated_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
-);
-
-CREATE TRIGGER update_goals_modtime
-    BEFORE UPDATE
-    ON goals
-    FOR EACH ROW
-EXECUTE PROCEDURE update_modified_column();
-
-
 --sessions_clans
 CREATE TABLE sessions_clans
 (
@@ -194,6 +176,7 @@ CREATE TABLE users_sessions
     user_id      UUID REFERENCES users (id) ON DELETE CASCADE,
     session_id   INT REFERENCES sessions (id) ON DELETE CASCADE,
     character_id INT REFERENCES characters (id) ON DELETE SET NULL,
+    transfer_reason TEXT,
     created_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );
@@ -201,5 +184,23 @@ CREATE TABLE users_sessions
 CREATE TRIGGER update_users_sessions_modtime
     BEFORE UPDATE
     ON users_sessions
+    FOR EACH ROW
+EXECUTE PROCEDURE update_modified_column();
+
+
+--goals
+CREATE TABLE goals
+(
+    id           SERIAL PRIMARY KEY,
+    users_session_id INT REFERENCES users_sessions(id) ON DELETE CASCADE,
+    name         VARCHAR(255) NOT NULL,
+    is_completed  BOOLEAN DEFAULT FALSE,
+    created_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
+    updated_at   TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
+);
+
+CREATE TRIGGER update_goals_modtime
+    BEFORE UPDATE
+    ON goals
     FOR EACH ROW
 EXECUTE PROCEDURE update_modified_column();

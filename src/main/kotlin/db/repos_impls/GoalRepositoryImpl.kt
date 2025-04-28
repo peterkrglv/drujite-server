@@ -10,7 +10,7 @@ class GoalRepositoryImpl: GoalRepository {
     override suspend fun add(goal: GoalModel): Int {
         return suspendTransaction {
             GoalDAO.new {
-                characterId = goal.characterId
+                usersSessionId = goal.usersSessionId
                 name = goal.name
                 isCompleted = goal.isCompleted
             }.id.value
@@ -22,7 +22,7 @@ class GoalRepositoryImpl: GoalRepository {
             GoalDAO.findById(id)?.let {
                 GoalModel(
                     id = it.id.value,
-                    characterId = it.characterId,
+                    usersSessionId = it.usersSessionId,
                     name = it.name,
                     isCompleted = it.isCompleted
                 )
@@ -39,12 +39,12 @@ class GoalRepositoryImpl: GoalRepository {
         }
     }
 
-    override suspend fun getCharacterGoals(characterId: Int): List<GoalModel> {
+    override suspend fun getCharacterGoals(usersSessionId: Int): List<GoalModel> {
         return suspendTransaction {
-            GoalDAO.find { GoalTable.characterId eq characterId }.map {
+            GoalDAO.find { GoalTable.usersSessionId eq usersSessionId }.map {
                 GoalModel(
                     id = it.id.value,
-                    characterId = it.characterId,
+                    usersSessionId = it.usersSessionId,
                     name = it.name,
                     isCompleted = it.isCompleted
                 )

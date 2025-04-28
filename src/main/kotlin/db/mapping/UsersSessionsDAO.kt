@@ -9,6 +9,7 @@ object UsersSessionsTable : IntIdTable("users_sessions") {
     val userId = uuid("user_id").references(UserTable.id)
     val sessionId = integer("session_id").references(SessionTable.id)
     val characterId = integer("character_id").references(CharacterTable.id).nullable()
+    val transferReason = text("transfer_reason").nullable()
 }
 
 class UsersSessionsDAO(id: EntityID<Int>) : IntEntity(id) {
@@ -16,4 +17,5 @@ class UsersSessionsDAO(id: EntityID<Int>) : IntEntity(id) {
     var userId by UsersSessionsTable.userId
     var sessionId by UsersSessionsTable.sessionId
     var characterId by UsersSessionsTable.characterId
+    var transferReason by UsersSessionsTable.transferReason
 }

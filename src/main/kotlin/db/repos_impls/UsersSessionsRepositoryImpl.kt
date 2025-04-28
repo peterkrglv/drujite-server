@@ -35,13 +35,14 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
     }
 
 
-    override suspend fun addCharacter(userId: UUID, sessionId: Int, characterId: Int): Boolean {
+    override suspend fun addCharacter(userId: UUID, sessionId: Int, characterId: Int, transferReason: String?): Boolean {
         return suspendTransaction {
             val existingSession =
                 UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
                     .firstOrNull()
             if (existingSession != null) {
                 existingSession.characterId = characterId
+                existingSession.transferReason = transferReason
                 return@suspendTransaction true
             } else {
                 return@suspendTransaction false
@@ -116,6 +117,15 @@ class UsersSessionsRepositoryImpl : UsersSessionsRepository {
                 UserDAO.find { UserTable.id eq it }.firstOrNull()
             }
             user?.let { daoToModel(it) }
+        }
+    }
+
+    override suspend fun getIdByUserAndSession(userId: UUID, sessionId: Int): Int? {
+        return suspendTransaction {
+            val existingSession =
+                UsersSessionsDAO.find { UsersSessionsTable.userId eq userId and (UsersSessionsTable.sessionId eq sessionId) }
+                    .firstOrNull()
+            return@suspendTransaction existingSession?.id?.value
         }
     }
 }
