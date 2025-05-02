@@ -8,4 +8,6 @@ interface UserRepository {
     suspend fun getByPhone(phone: String): UserModel?
     suspend fun add(user: UserModel): UserModel?
     suspend fun delete(id: UUID): Boolean
+    suspend fun checkIsAdmin(id: UUID): Boolean
+    suspend fun makeAdmin(id: UUID): Boolean
 }

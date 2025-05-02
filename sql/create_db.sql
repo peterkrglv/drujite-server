@@ -25,6 +25,7 @@ CREATE TABLE users
     phone      VARCHAR(15) UNIQUE NOT NULL,
     password   VARCHAR(255)       NOT NULL,
     gender     VARCHAR(15)        NOT NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now()),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT convert_to_moscow_time(now())
 );

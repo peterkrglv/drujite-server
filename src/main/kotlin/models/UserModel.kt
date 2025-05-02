@@ -8,7 +8,8 @@ data class UserModel(
     val username: String,
     val phone: String,
     val password: String,
-    val gender: String
+    val gender: String,
+    val isAdmin: Boolean = false
 )
 
 

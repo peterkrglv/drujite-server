@@ -40,4 +40,20 @@ class UserRepositoryImpl : UserRepository {
             } ?: false
         }
     }
+
+    override suspend fun checkIsAdmin(id: UUID): Boolean {
+        return suspendTransaction {
+            UserDAO.findById(id)?.isAdmin ?: false
+        }
+    }
+
+    override suspend fun makeAdmin(id: UUID): Boolean {
+        return suspendTransaction {
+            UserDAO.findById(id)?.let {
+                it.isAdmin = true
+                it.flush()
+                true
+            } ?: false
+        }
+    }
 }

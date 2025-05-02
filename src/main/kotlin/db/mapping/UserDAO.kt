@@ -10,6 +10,7 @@ object UserTable : UUIDTable("users") {
     val username = varchar("username", 255)
     val password = varchar("password", 255)
     val gender = varchar("gender", 15)
+    val isAdmin = bool("is_admin").default(false)
 }
 
 class UserDAO(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -19,6 +20,7 @@ class UserDAO(id: EntityID<UUID>) : UUIDEntity(id) {
     var username by UserTable.username
     var password by UserTable.password
     var gender by UserTable.gender
+    var isAdmin by UserTable.isAdmin
 }
 
 fun daoToModel(dao: UserDAO) = UserModel(

@@ -6,6 +6,7 @@ import io.ktor.server.plugins.openapi.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.swagger.codegen.v3.generators.html.StaticHtmlCodegen
+import ru.drujite.routing.adminAuthRoute
 import ru.drujite.routing.authRoute
 import ru.drujite.routing.imageRoute
 import ru.drujite.services.ImageService
@@ -75,6 +76,10 @@ fun Application.configureRouting(
 
         route(v1 + "images") {
             imageRoute(imageService)
+        }
+
+        route (v1+ "admin") {
+            adminAuthRoute(jwtService, userService)
         }
 
         get(v1) {

@@ -22,4 +22,12 @@ class UserService (
         }
         return userRepository.add(user)
     }
+
+    suspend fun checkIsAdmin(id: String): Boolean {
+        return userRepository.checkIsAdmin(UUID.fromString(id))
+    }
+
+    suspend fun makeAdmin(id: String): Boolean {
+        return userRepository.makeAdmin(UUID.fromString(id))
+    }
 }
