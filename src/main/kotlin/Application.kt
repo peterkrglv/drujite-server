@@ -4,6 +4,7 @@ import configuration.configureDatabases
 import db.repos_impls.*
 import io.ktor.server.application.*
 import routing.configureRouting
+import ru.drujite.configuration.configureCORS
 import ru.drujite.configuration.configureMonitoring
 import ru.drujite.configuration.configureSecurity
 import ru.drujite.configuration.configureSerialization
@@ -54,4 +55,5 @@ fun Application.module() {
     )
     configureDatabases()
     configureMonitoring()
+    configureCORS()
 }
