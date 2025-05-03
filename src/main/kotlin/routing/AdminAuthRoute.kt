@@ -6,7 +6,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import requests.LoginRequest
 import routing.toModel
-import ru.drujite.models.UserModel
 import ru.drujite.requests.SignupRequest
 import services.JwtService
 import services.UserService
